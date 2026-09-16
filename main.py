@@ -696,15 +696,14 @@ def render_chapter_list(
 
 WELCOME = (
     "📚 *Welcome to the free eBook finder*\n\n"
-    "I search *Standard Ebooks*, *Project Gutenberg*, and *Internet Archive* "
-    "for public-domain books and send you the file right here in the chat — "
-    "EPUB, Kindle, or PDF, whichever the source has available.\n\n"
     "Just type the title or author you're looking for — no command needed.\n\n"
     "Example: `Pride and Prejudice`\n\n"
     "💡 Tip: if a book doesn't show up by its full title, try searching just "
     "the author's last name.\n\n"
-    "⏳ If the bot has been idle for a while, the first search may take a "
-    "few extra seconds to respond — thanks for your patience.\n\n"
+    "⏳ Heads up: if nobody's used the bot in a while, it falls asleep to "
+    "save resources. Your first message might take up to a minute to get a "
+    "response — it's not broken, just waking up. Every message after that "
+    "is fast again.\n\n"
     "You can also try /popular for a list of classics ready to download, "
     "no searching needed."
 )
