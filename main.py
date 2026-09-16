@@ -165,6 +165,30 @@ def generate_codes(count: int, feature: str, prefix: str | None = None) -> list[
     return new_codes
 
 
+# Hosts without a persistent disk (e.g. Render's free tier) wipe access.json
+# on every redeploy, which would otherwise delete the codes sold to
+# customers along with it. Re-creating these specific codes on startup if
+# they're missing makes them survive redeploys — at the cost of also
+# resetting *who* already redeemed them, so a customer who was unlocked
+# before a redeploy has to send /unlock again afterward.
+SEED_CODES = {
+    "EBOOKS9898": "ebooks",
+    "AUDIO2020": "audiobooks",
+}
+
+
+def _ensure_seed_codes() -> None:
+    data = _load_access()
+    codes = data.setdefault("codes", {})
+    changed = False
+    for code, feature in SEED_CODES.items():
+        if code not in codes:
+            codes[code] = {"feature": feature, "used_by": None}
+            changed = True
+    if changed:
+        _save_access(data)
+
+
 GUTENDEX_URL = "https://gutendex.com/books/"
 ARCHIVE_SEARCH_URL = "https://archive.org/advancedsearch.php"
 ARCHIVE_METADATA_URL = "https://archive.org/metadata/{identifier}"
@@ -1106,6 +1130,8 @@ def build_application() -> Application:
 
 
 def main() -> None:
+    if REQUIRE_ACCESS_CODE:
+        _ensure_seed_codes()
     application = build_application()
     webhook_url = os.environ.get("WEBHOOK_URL")
 
