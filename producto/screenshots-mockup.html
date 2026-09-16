@@ -1,0 +1,231 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Bot screenshots mockup</title>
+<style>
+  :root {
+    --tg-bg: #e8f3fc;
+    --tg-header: #517da2;
+    --tg-bubble-bot: #ffffff;
+    --tg-bubble-user: #effdde;
+    --tg-text: #000000;
+    --tg-blue: #3390ec;
+    --tg-btn-bg: #ffffff;
+    --tg-btn-border: #e3e3e3;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #2b2b2b;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 40px;
+  }
+  .frame {
+    width: 390px;
+    background: var(--tg-bg);
+    border-radius: 0px;
+    overflow: hidden;
+    margin-bottom: 60px;
+    box-shadow: 0 0 0 1px #000;
+  }
+  .header {
+    background: var(--tg-header);
+    color: white;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: linear-gradient(135deg,#6dc5f0,#3390ec);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .header .name { font-weight: 600; font-size: 16px; }
+  .header .status { font-size: 12.5px; opacity: 0.85; }
+  .chat {
+    padding: 14px 10px;
+    min-height: 200px;
+  }
+  .row { display: flex; margin-bottom: 10px; }
+  .row.user { justify-content: flex-end; }
+  .bubble {
+    max-width: 82%;
+    padding: 8px 11px;
+    border-radius: 12px;
+    font-size: 15px;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.08);
+  }
+  .bubble.bot { background: var(--tg-bubble-bot); border-top-left-radius: 4px; }
+  .bubble.user { background: var(--tg-bubble-user); border-top-right-radius: 4px; }
+  .bubble b { font-weight: 700; }
+  .bubble code {
+    background: rgba(0,0,0,0.06);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 13.5px;
+  }
+  .kb {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 4px;
+    max-width: 82%;
+  }
+  .kb-row { display: flex; gap: 4px; }
+  .kb-btn {
+    flex: 1;
+    background: var(--tg-btn-bg);
+    border: none;
+    border-top: 1px solid var(--tg-btn-border);
+    color: var(--tg-blue);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 9px 6px;
+    text-align: center;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.06);
+  }
+  .doc-bubble {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--tg-bubble-bot);
+    padding: 10px;
+    border-radius: 12px;
+    border-top-left-radius: 4px;
+    max-width: 82%;
+  }
+  .doc-icon {
+    width: 40px; height: 40px; border-radius: 8px;
+    background: #3390ec; color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+  }
+  .doc-info .fname { font-size: 14px; font-weight: 600; }
+  .doc-info .fsize { font-size: 12.5px; color: #8a8a8a; }
+  .label {
+    color: #ddd; font-size: 13px; margin: -40px 0 14px 4px; font-family: monospace;
+  }
+</style>
+</head>
+<body>
+
+<div class="label">1-welcome.png</div>
+<div class="frame" id="f1">
+  <div class="header">
+    <div class="avatar">📚</div>
+    <div>
+      <div class="name">Ebooksbuddybot</div>
+      <div class="status">bot</div>
+    </div>
+  </div>
+  <div class="chat">
+    <div class="row"><div class="bubble bot"><b>📚 Welcome to the free eBook finder</b>
+
+I search <b>Standard Ebooks</b>, <b>Project Gutenberg</b>, and <b>Internet Archive</b> for public-domain books and send you the file right here in the chat — EPUB, Kindle, or PDF, whichever the source has available.
+
+Just type the title or author you're looking for — no command needed.
+
+Example: <code>Pride and Prejudice</code></div></div>
+    <div class="kb"><div class="kb-row"><div class="kb-btn">🔄 Reset conversation</div></div></div>
+  </div>
+</div>
+
+<div class="label">2-unlock.png</div>
+<div class="frame" id="f2">
+  <div class="header">
+    <div class="avatar">📚</div>
+    <div><div class="name">Ebooksbuddybot</div><div class="status">bot</div></div>
+  </div>
+  <div class="chat">
+    <div class="row user"><div class="bubble user"><code>/unlock BOOKS-4F91A2</code></div></div>
+    <div class="row"><div class="bubble bot">✅ Unlocked! Just type any book title to search.</div></div>
+  </div>
+</div>
+
+<div class="label">3-search.png</div>
+<div class="frame" id="f3">
+  <div class="header">
+    <div class="avatar">📚</div>
+    <div><div class="name">Ebooksbuddybot</div><div class="status">bot</div></div>
+  </div>
+  <div class="chat">
+    <div class="row user"><div class="bubble user">Pride and Prejudice</div></div>
+    <div class="row"><div class="bubble bot">📚 Found 6 result(s) for "Pride and Prejudice":
+
+1. <b>Pride and Prejudice</b> — Jane Austen
+2. <b>Pride and Prejudice</b> — Austen, Jane
+3. <b>Pride and Prejudice and Zombies</b> — Seth Grahame-Smith</div></div>
+    <div class="kb">
+      <div class="kb-row">
+        <div class="kb-btn">1</div><div class="kb-btn">2</div><div class="kb-btn">3</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="label">4-book-detail.png</div>
+<div class="frame" id="f4">
+  <div class="header">
+    <div class="avatar">📚</div>
+    <div><div class="name">Ebooksbuddybot</div><div class="status">bot</div></div>
+  </div>
+  <div class="chat">
+    <div class="row"><div class="bubble bot">📖 <b>Pride and Prejudice</b>
+👤 Jane Austen</div></div>
+    <div class="kb">
+      <div class="kb-row">
+        <div class="kb-btn">⬇️ EPUB</div><div class="kb-btn">⬇️ Kindle</div>
+      </div>
+      <div class="kb-row"><div class="kb-btn">🔙 Back to results</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="label">5-file-received.png</div>
+<div class="frame" id="f5">
+  <div class="header">
+    <div class="avatar">📚</div>
+    <div><div class="name">Ebooksbuddybot</div><div class="status">bot</div></div>
+  </div>
+  <div class="chat">
+    <div class="row"><div class="doc-bubble">
+      <div class="doc-icon">EPUB</div>
+      <div class="doc-info">
+        <div class="fname">Pride_and_Prejudice.epub</div>
+        <div class="fsize">612 KB</div>
+      </div>
+    </div></div>
+  </div>
+</div>
+
+<div class="label">6-popular.png</div>
+<div class="frame" id="f6">
+  <div class="header">
+    <div class="avatar">📚</div>
+    <div><div class="name">Ebooksbuddybot</div><div class="status">bot</div></div>
+  </div>
+  <div class="chat">
+    <div class="row user"><div class="bubble user"><code>/popular</code></div></div>
+    <div class="row"><div class="bubble bot">1. <b>Pride and Prejudice</b> — Jane Austen
+2. <b>Frankenstein</b> — Mary Shelley
+3. <b>Dracula</b> — Bram Stoker
+4. <b>Alice's Adventures in Wonderland</b> — Lewis Carroll
+5. <b>A Tale of Two Cities</b> — Charles Dickens
+
+Page 1/2</div></div>
+    <div class="kb">
+      <div class="kb-row"><div class="kb-btn">1</div><div class="kb-btn">2</div><div class="kb-btn">3</div><div class="kb-btn">4</div><div class="kb-btn">5</div></div>
+      <div class="kb-row"><div class="kb-btn">⏮</div><div class="kb-btn">◀️</div><div class="kb-btn">▶️</div><div class="kb-btn">⏭</div></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

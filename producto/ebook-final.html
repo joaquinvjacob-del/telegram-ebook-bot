@@ -1,0 +1,519 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>The Free Library Method</title>
+<style>
+  @page {
+    size: 7in 10in;
+    margin: 0.7in 0.75in;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    background: #ffffff;
+  }
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #232323;
+    font-size: 12.5pt;
+    line-height: 1.55;
+  }
+  h1, h2, h3 { font-family: 'Segoe UI', Helvetica, Arial, sans-serif; color: #14324d; }
+  .cover {
+    height: 8.6in;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: radial-gradient(circle at 30% 20%, #3b6a94, #14283d 70%);
+    color: white;
+    border-radius: 6px;
+    padding: 1in 0.6in;
+    page-break-after: always;
+  }
+  .cover .kicker {
+    font-family: 'Segoe UI', sans-serif;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-size: 11pt;
+    opacity: 0.75;
+    margin-bottom: 18px;
+  }
+  .cover h1 {
+    color: white;
+    font-family: Georgia, serif;
+    font-size: 40pt;
+    line-height: 1.15;
+    margin: 0 0 14px 0;
+  }
+  .cover .sub {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14pt;
+    opacity: 0.9;
+    max-width: 4.6in;
+  }
+  .cover .icon-row { font-size: 46pt; margin-bottom: 30px; opacity: 0.9; }
+  .cover .placeholder-note {
+    margin-top: 60px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 9pt;
+    opacity: 0.55;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    padding-top: 14px;
+    max-width: 4.6in;
+  }
+
+  section { page-break-before: always; }
+  section:first-of-type { page-break-before: avoid; }
+
+  h2.part-title {
+    font-size: 22pt;
+    border-bottom: 3px solid #3b6a94;
+    padding-bottom: 8px;
+    margin-bottom: 4px;
+  }
+  .part-kicker {
+    font-family: 'Segoe UI', sans-serif;
+    color: #3b6a94;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 10pt;
+    margin-bottom: 2px;
+  }
+  h3 { font-size: 14pt; margin-top: 26px; }
+  code {
+    background: #eef3f7;
+    border: 1px solid #d8e2ea;
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-family: Consolas, monospace;
+    font-size: 11pt;
+  }
+  .callout {
+    background: #f4f8fb;
+    border-left: 4px solid #3b6a94;
+    padding: 10px 14px;
+    margin: 16px 0;
+    font-size: 11.5pt;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .callout.warn { border-left-color: #b5741f; background: #fbf5ec; }
+
+  /* Nothing below should ever be sliced across a page boundary. Lists
+     themselves are deliberately excluded — only individual <li> items are
+     protected further down — so a long list can still flow naturally
+     across a page break instead of being shoved awkwardly to fit. */
+  .tg-frame, .caption, .divider-img, h3, .part-kicker, .tg-block {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  /* Keep each heading glued to the content that follows it, instead of
+     landing alone at the bottom of a page. */
+  h3, .part-kicker, h2.part-title {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+  li { break-inside: avoid; }
+  ol, ul { padding-left: 1.3em; }
+  li { margin-bottom: 6px; }
+
+  /* Section divider image placeholders */
+  .divider-img {
+    height: 1.6in;
+    border-radius: 6px;
+    margin: 14px 0 22px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+    font-size: 10pt;
+    text-align: center;
+    padding: 10px;
+  }
+  .divider-1 { background: linear-gradient(135deg,#6f9fc4,#2c4f6e); }
+  .divider-3 { background: linear-gradient(135deg,#e08c6b,#b8543a); }
+  .divider-4 { background: linear-gradient(135deg,#8a9a5b,#4f5c30); }
+
+  /* Telegram mockup, scaled for inline use inside the book */
+  .tg-frame {
+    width: 3.4in;
+    margin: 16px auto;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 3px 14px rgba(0,0,0,0.25);
+    border: 1px solid #cfd9e0;
+  }
+  .tg-header {
+    background: #517da2;
+    color: white;
+    padding: 9px 11px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  .tg-avatar {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: linear-gradient(135deg,#6dc5f0,#3390ec);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+  }
+  .tg-header .tg-name { font-weight: 600; font-size: 10.5pt; }
+  .tg-header .tg-status { font-size: 7.5pt; opacity: 0.85; }
+  .tg-chat { background: #e8f3fc; padding: 10px 8px; }
+  .tg-row { display: flex; margin-bottom: 7px; }
+  .tg-row.user { justify-content: flex-end; }
+  .tg-bubble {
+    max-width: 85%;
+    padding: 6px 9px;
+    border-radius: 10px;
+    font-size: 9pt;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    font-family: 'Segoe UI', sans-serif;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.08);
+  }
+  .tg-bubble.bot { background: #fff; border-top-left-radius: 3px; }
+  .tg-bubble.user { background: #effdde; border-top-right-radius: 3px; }
+  .tg-bubble code { font-size: 8.5pt; padding: 0 3px; }
+  .tg-kb { display: flex; flex-direction: column; gap: 3px; margin-top: 3px; max-width: 85%; }
+  .tg-kb-row { display: flex; gap: 3px; }
+  .tg-kb-btn {
+    flex: 1; background: #fff; border-top: 1px solid #e3e3e3;
+    color: #3390ec; font-size: 8pt; font-weight: 600;
+    padding: 6px 4px; text-align: center; border-radius: 0 0 8px 8px;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  .tg-doc {
+    display: flex; align-items: center; gap: 8px;
+    background: #fff; padding: 8px; border-radius: 10px; border-top-left-radius: 3px;
+    max-width: 85%;
+  }
+  .tg-doc-icon {
+    width: 30px; height: 30px; border-radius: 6px; background: #3390ec; color: white;
+    display: flex; align-items: center; justify-content: center; font-size: 7.5pt; font-weight: 700;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  .tg-doc .fname { font-size: 9pt; font-weight: 600; font-family: 'Segoe UI', sans-serif; }
+  .tg-doc .fsize { font-size: 7.5pt; color: #8a8a8a; font-family: 'Segoe UI', sans-serif; }
+  .caption {
+    text-align: center; font-family: 'Segoe UI', sans-serif; font-size: 9pt;
+    color: #777; margin-top: -10px; margin-bottom: 20px;
+  }
+  .tg-block { margin-bottom: 4px; }
+
+  .booklist { columns: 2; column-gap: 24px; font-size: 10.5pt; }
+  .booklist li { break-inside: avoid; margin-bottom: 4px; }
+
+  footer.page-foot {
+    text-align: center; font-family: 'Segoe UI', sans-serif; font-size: 9pt; color: #999;
+    margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<div class="cover">
+  <div class="kicker">A Reader's Guide</div>
+  <div class="icon-row">📚</div>
+  <h1>The Free Library Method</h1>
+  <div class="sub">How to Unlock 80,000+ Free Books in 60 Seconds — On Your Phone, Kindle, or Any Device</div>
+  <div class="placeholder-note">
+    [Cover image placeholder — this background will be replaced with the Higgsfield-generated
+    cover photo. Prompt is in estructura-ebook.md, image 1. Everything else on this page renders correctly as-is.]
+  </div>
+</div>
+
+<!-- ============ INTRO ============ -->
+<section>
+<h2 class="part-title">Introduction</h2>
+<p>Welcome — you now have everything you need to read almost any classic book, completely free, for as long as you want.</p>
+<p>In the next few minutes, you're going to:</p>
+<ul>
+  <li>Install one simple app (if you don't already have it)</li>
+  <li>Activate your personal access with the code you received</li>
+  <li>Search for and download your first book</li>
+</ul>
+<p>No subscriptions. No monthly fees. No limit on how many books you download. Once you're set up, getting a new book takes about 15 seconds — less time than it takes to find your credit card.</p>
+
+<h3>What this actually is</h3>
+<p>Behind the scenes, this gives you access to a private tool that searches three of the largest legal libraries of free books in the world — <b>Standard Ebooks</b>, <b>Project Gutenberg</b>, and <b>Internet Archive</b> — all at once, and hands you the file instantly, already picked from the best-quality source available. No hunting through five different websites, no sketchy pop-ups, no fake "download" buttons that install something you didn't ask for.</p>
+
+<h3>What this is not</h3>
+<div class="callout">
+To be completely clear: every single book you'll download through this is <b>legally free and public domain</b> — meaning the copyright has expired and nobody owns it anymore. This is not piracy, and it's not a gray area. You're not "getting away with" anything. These are libraries doing exactly what libraries are for.
+</div>
+<p>Let's get you set up.</p>
+</section>
+
+<!-- ============ PART 1 ============ -->
+<section>
+<div class="part-kicker">Part One</div>
+<h2 class="part-title">Installing Telegram</h2>
+<div class="divider-1 divider-img">[Section image placeholder — Higgsfield prompt #2 in estructura-ebook.md]</div>
+
+<p>Your access runs inside an app called <b>Telegram</b> — a free, extremely popular messaging app (similar to WhatsApp), available on every phone, tablet, and computer. If you already use Telegram, skip ahead to Part Two.</p>
+
+<h3>On iPhone / iPad</h3>
+<ol>
+  <li>Open the <b>App Store</b>.</li>
+  <li>Tap the search icon and type <b>Telegram</b>.</li>
+  <li>Tap <b>Get</b>, then confirm with Face ID, Touch ID, or your Apple ID password.</li>
+  <li>Once it's installed, tap <b>Open</b>.</li>
+</ol>
+
+<h3>On Android</h3>
+<ol>
+  <li>Open the <b>Play Store</b>.</li>
+  <li>Search for <b>Telegram</b>.</li>
+  <li>Tap <b>Install</b>.</li>
+  <li>Once it's installed, tap <b>Open</b>.</li>
+</ol>
+
+<h3>On a computer (Windows / Mac)</h3>
+<ol>
+  <li>Go to <b>telegram.org</b> in your browser.</li>
+  <li>Click <b>Get Telegram</b>, and download the version for your operating system.</li>
+  <li>Install it like you would any other program, then open it.</li>
+</ol>
+<p style="font-size:10.5pt;color:#555">(You can also just use Telegram directly in your browser at web.telegram.org — no installation needed — though the app is more reliable for receiving files.)</p>
+
+<h3>Creating your account (first-time Telegram users only)</h3>
+<p>When you open Telegram for the first time, it will ask for your phone number to create your account. This is completely normal — it's how Telegram verifies you're a real person, the same as any messaging app. It will text you a short verification code; type that code in, and you're in. This takes under a minute.</p>
+</section>
+
+<!-- ============ PART 2 ============ -->
+<section>
+<div class="part-kicker">Part Two</div>
+<h2 class="part-title">Activating Your Access</h2>
+
+<ol>
+  <li>Inside Telegram, tap the search icon (usually a magnifying glass at the top).</li>
+  <li>Type in the bot name (found in your purchase confirmation) and tap it to open the chat.</li>
+  <li>Tap <b>Start</b> (or send <code>/start</code> if there's no button).</li>
+</ol>
+
+<div class="tg-block">
+<div class="tg-frame">
+  <div class="tg-header"><div class="tg-avatar">📚</div><div><div class="tg-name">Ebooksbuddybot</div><div class="tg-status">bot</div></div></div>
+  <div class="tg-chat">
+    <div class="tg-row"><div class="tg-bubble bot"><b>📚 Welcome to the free eBook finder</b>
+
+Just type the title or author you're looking for — no command needed.
+
+Example: <code>Pride and Prejudice</code></div></div>
+    <div class="tg-kb"><div class="tg-kb-row"><div class="tg-kb-btn">🔄 Reset conversation</div></div></div>
+  </div>
+</div>
+<div class="caption">What you'll see after tapping Start</div>
+</div><!-- /tg-block -->
+
+<p>Now send this exact message, replacing the placeholder with your real code:</p>
+<p style="text-align:center;font-size:13pt"><code>/unlock YOUR-CODE-HERE</code></p>
+<p>You should immediately get a confirmation:</p>
+
+<div class="tg-block">
+<div class="tg-frame">
+  <div class="tg-header"><div class="tg-avatar">📚</div><div><div class="tg-name">Ebooksbuddybot</div><div class="tg-status">bot</div></div></div>
+  <div class="tg-chat">
+    <div class="tg-row user"><div class="tg-bubble user"><code>/unlock BOOKS-4F91A2</code></div></div>
+    <div class="tg-row"><div class="tg-bubble bot">✅ Unlocked! Just type any book title to search.</div></div>
+  </div>
+</div>
+<div class="caption">You're fully activated once you see this</div>
+</div><!-- /tg-block -->
+
+<h3>If your code doesn't work</h3>
+<div class="callout warn">
+<ul>
+<li><b>Double-check for typos.</b> Codes don't care about uppercase or lowercase, but every letter and number needs to be exact — copy-paste it directly from your confirmation instead of retyping it.</li>
+<li><b>Make sure there's a space</b> between <code>/unlock</code> and your code.</li>
+<li><b>"Already used on another account"</b> — message us on Instagram (see the Support section) and we'll sort it out immediately.</li>
+</ul>
+</div>
+</section>
+
+<!-- ============ PART 3 ============ -->
+<section>
+<div class="part-kicker">Part Three</div>
+<h2 class="part-title">How to Use the Bot</h2>
+<div class="divider-3 divider-img">[Section image placeholder — Higgsfield prompt #3 in estructura-ebook.md]</div>
+
+<p>This is the easy part. There's no command to remember — you just type.</p>
+
+<h3>Searching for a book</h3>
+<p>Simply type the title (or the author's name) directly into the chat, like you're texting a friend:</p>
+
+<div class="tg-block">
+<div class="tg-frame">
+  <div class="tg-header"><div class="tg-avatar">📚</div><div><div class="tg-name">Ebooksbuddybot</div><div class="tg-status">bot</div></div></div>
+  <div class="tg-chat">
+    <div class="tg-row user"><div class="tg-bubble user">Pride and Prejudice</div></div>
+    <div class="tg-row"><div class="tg-bubble bot">📚 Found 6 result(s):
+
+1. <b>Pride and Prejudice</b> — Jane Austen
+2. <b>Pride and Prejudice</b> — Austen, Jane
+3. <b>Pride and Prejudice and Zombies</b> — Seth Grahame-Smith</div></div>
+    <div class="tg-kb"><div class="tg-kb-row"><div class="tg-kb-btn">1</div><div class="tg-kb-btn">2</div><div class="tg-kb-btn">3</div></div></div>
+  </div>
+</div>
+<div class="caption">Send it, and within a couple seconds you'll see a numbered list</div>
+</div><!-- /tg-block -->
+
+<div class="callout">💡 <b>Tip:</b> If a book doesn't show up under its exact title, try searching just the author's last name instead — e.g., "Dickens" instead of "A Tale of Two Cities."</div>
+
+<h3>Picking your book</h3>
+<p>Under the list, tap the number next to the book you want. If there are more results than fit on one screen, tap the navigation arrows (⏮ ◀️ ▶️ ⏭) to move between pages without losing your place.</p>
+
+<h3>Choosing a format</h3>
+
+<div class="tg-block">
+<div class="tg-frame">
+  <div class="tg-header"><div class="tg-avatar">📚</div><div><div class="tg-name">Ebooksbuddybot</div><div class="tg-status">bot</div></div></div>
+  <div class="tg-chat">
+    <div class="tg-row"><div class="tg-bubble bot">📖 <b>Pride and Prejudice</b>
+👤 Jane Austen</div></div>
+    <div class="tg-kb">
+      <div class="tg-kb-row"><div class="tg-kb-btn">&#8595; EPUB</div><div class="tg-kb-btn">&#8595; Kindle</div></div>
+      <div class="tg-kb-row"><div class="tg-kb-btn">&#8592; Back to results</div></div>
+    </div>
+  </div>
+</div>
+<div class="caption">Once you pick a book, you'll see the formats available</div>
+</div><!-- /tg-block -->
+
+<ul>
+  <li><b>EPUB</b> — works on almost everything except Kindle (phones, tablets, Kobo, most reading apps)</li>
+  <li><b>Kindle</b> — built specifically for Amazon Kindle devices and apps</li>
+  <li><b>PDF</b> — a fixed-layout version, works everywhere but doesn't resize text as nicely on small screens</li>
+</ul>
+
+<p>Tap the format that matches your device (see Part Four for exactly what to do with it), and the file lands directly in your chat within a few seconds:</p>
+
+<div class="tg-block">
+<div class="tg-frame">
+  <div class="tg-header"><div class="tg-avatar">📚</div><div><div class="tg-name">Ebooksbuddybot</div><div class="tg-status">bot</div></div></div>
+  <div class="tg-chat">
+    <div class="tg-row"><div class="tg-doc">
+      <div class="tg-doc-icon">EPUB</div>
+      <div><div class="fname">Pride_and_Prejudice.epub</div><div class="fsize">612 KB</div></div>
+    </div></div>
+  </div>
+</div>
+<div class="caption">Your book, delivered straight to the chat</div>
+</div><!-- /tg-block -->
+
+<h3>Quick access to popular classics</h3>
+<p>If you don't have a specific title in mind, send <code>/popular</code> — this instantly shows you 10 of the most-requested classics of all time, no searching required.</p>
+
+<h3>Starting fresh</h3>
+<p>If your chat ever gets cluttered, send <code>/reset</code> and the bot will clean up the conversation and show you the welcome message again. Nothing about your access is affected.</p>
+</section>
+
+<!-- ============ PART 4 ============ -->
+<section>
+<div class="part-kicker">Part Four</div>
+<h2 class="part-title">Getting Your Book Onto Your Device</h2>
+<div class="divider-4 divider-img">[Section image placeholder — Higgsfield prompt #4 in estructura-ebook.md]</div>
+
+<p>This is the part most guides skip — and it's exactly where most people get stuck. Here's exactly what to do, device by device.</p>
+
+<h3>📱 iPhone / iPad</h3>
+<ol>
+  <li>After tapping the download button, the file appears as a document inside your Telegram chat.</li>
+  <li>Tap the file, then tap the <b>share icon</b> (the square with an arrow pointing up).</li>
+  <li>Choose <b>Save to Files</b>, or if you have a reading app installed, choose <b>Copy to [App Name]</b> directly.</li>
+  <li>If you saved it to Files, open the <b>Books</b> app (built into every iPhone) — it will usually pick it up automatically, or tap <b>+</b> inside Books and select the file.</li>
+</ol>
+
+<h3>🤖 Android</h3>
+<ol>
+  <li>Tap the file inside your Telegram chat, then tap the <b>download icon</b> to save it to your phone.</li>
+  <li>Open whichever reading app you prefer (Google Play Books, Moon+ Reader, or similar — most are free).</li>
+  <li>In the app, look for an <b>Import</b>, <b>Add file</b>, or <b>+</b> button, and select the file from your <b>Downloads</b> folder.</li>
+</ol>
+
+<h3>📖 Kindle — the most common sticking point</h3>
+<p>Kindle devices don't read EPUB files directly, so make sure you tap the <b>Kindle format button</b> (not EPUB) when you download. Once you have that file, you have three options:</p>
+
+<p><b>Option A — Send to Kindle app (easiest, if available in your country):</b></p>
+<ol>
+  <li>Save the file from Telegram to your phone (see iPhone/Android steps above).</li>
+  <li>Open the free <b>Send to Kindle</b> app, sign in with your Amazon account, and select the file to send it straight to your Kindle library.</li>
+</ol>
+
+<p><b>Option B — Email it to your Kindle:</b></p>
+<ol>
+  <li>Every Kindle has its own email address, like <code>yourname_123@kindle.com</code>. Find yours at <b>amazon.com → Manage Your Content and Devices → Preferences → Personal Document Settings</b>.</li>
+  <li>Save the file to your phone, then email it as an attachment to that address.</li>
+  <li>It'll appear on your Kindle next time it connects to Wi-Fi (usually within a couple minutes).</li>
+</ol>
+
+<p><b>Option C — USB cable (works 100% of the time, no internet needed):</b></p>
+<ol>
+  <li>Save the file to your computer.</li>
+  <li>Plug your Kindle into your computer with a USB cable.</li>
+  <li>Your Kindle will appear as a drive — drag the file into the <b>documents</b> folder.</li>
+  <li>Unplug, and it'll show up on your Kindle's home screen.</li>
+</ol>
+
+<h3>📗 Kobo and other e-readers</h3>
+<p>Kobo reads EPUB natively:</p>
+<ol>
+  <li>Save the EPUB file to your computer.</li>
+  <li>Connect your Kobo via USB — it appears as a drive.</li>
+  <li>Drag the file into the main folder, then safely eject.</li>
+</ol>
+<p style="font-size:10.5pt;color:#555">For any other e-reader brand, the USB method above almost always works the same way, since EPUB is the universal standard format.</p>
+</section>
+
+<!-- ============ PART 5 ============ -->
+<section>
+<div class="part-kicker">Part Five</div>
+<h2 class="part-title">Bonus Content</h2>
+
+<h3>50 classics to get you started</h3>
+<p>Here are 50 must-read classics, ready to search the moment you want them. Just type the title exactly as shown:</p>
+
+<ul class="booklist">
+<li>Pride and Prejudice</li><li>Frankenstein</li><li>Dracula</li><li>Alice's Adventures in Wonderland</li>
+<li>A Tale of Two Cities</li><li>Moby Dick</li><li>The Adventures of Sherlock Holmes</li><li>War and Peace</li>
+<li>The Picture of Dorian Gray</li><li>Romeo and Juliet</li><li>Jane Eyre</li><li>Wuthering Heights</li>
+<li>Great Expectations</li><li>The Great Gatsby</li><li>Anna Karenina</li><li>Crime and Punishment</li>
+<li>The Count of Monte Cristo</li><li>Little Women</li><li>The Adventures of Huckleberry Finn</li><li>Treasure Island</li>
+<li>The Strange Case of Dr Jekyll and Mr Hyde</li><li>The War of the Worlds</li><li>Middlemarch</li><li>Vanity Fair</li>
+<li>The Odyssey</li><li>The Iliad</li><li>Don Quixote</li><li>Les Misérables</li>
+<li>The Scarlet Letter</li><li>Emma</li><li>Sense and Sensibility</li><li>Oliver Twist</li>
+<li>David Copperfield</li><li>The Brothers Karamazov</li><li>Madame Bovary</li><li>The Adventures of Tom Sawyer</li>
+<li>Robinson Crusoe</li><li>Gulliver's Travels</li><li>The Time Machine</li><li>The Invisible Man</li>
+<li>Heart of Darkness</li><li>North and South</li><li>The Wind in the Willows</li><li>Peter Pan</li>
+<li>The Secret Garden</li><li>A Christmas Carol</li><li>The Importance of Being Earnest</li><li>Hamlet</li>
+<li>Macbeth</li><li>Persuasion</li>
+</ul>
+
+<h3>If a book doesn't show up</h3>
+<ul>
+  <li>Try just the author's last name.</li>
+  <li>Try dropping subtitles (e.g., search "Frankenstein" instead of "Frankenstein; or, The Modern Prometheus").</li>
+  <li>Very recent books (still under copyright) won't appear — this tool covers public-domain classics, not current bestsellers.</li>
+</ul>
+
+<h3>Getting help</h3>
+<p>Something not working the way this guide describes? Don't struggle with it — message us directly on Instagram and we'll help you sort it out personally, usually within the day.</p>
+<p style="text-align:center;font-size:13pt"><b>Instagram: @your_ig_handle_here</b></p>
+</section>
+
+<!-- ============ CLOSING ============ -->
+<section>
+<h2 class="part-title">You're All Set</h2>
+<div class="divider-1 divider-img">[Closing image placeholder — Higgsfield prompt #5 in estructura-ebook.md]</div>
+<p>That's genuinely everything there is to it. Install, activate, search, download, read. Enjoy the library — it's yours now, for good.</p>
+<footer class="page-foot">The Free Library Method</footer>
+</section>
+
+</body>
+</html>
